@@ -14,7 +14,7 @@ I implemented a Record-Triggered Flow as specified in the challenge to handle th
 - QuoteApprovalTrigger.trigger-meta.xml - Trigger metadata
 - QuoteApprovalTriggerHandler.cls - Handler class with business logic
 - QuoteApprovalTriggerHandler.cls-meta.xml - Handler metadata
-- QuoteApprovalTriggerHandlerTest.cls - Test class (100% coverage)
+- QuoteApprovalTriggerHandlerTest.cls - Test class (96% coverage)
 - QuoteApprovalTriggerHandlerTest.cls-meta.xml - Test class metadata
 
 I implemented a handler pattern to separate concerns and improve testability. The trigger fires on after insert and after update, but only processes Quotes where Approval_Status__c changed to "Approved." To handle bulkification, I used set-based processing: collecting affected Opportunity IDs in a Set, performing a single SOQL query ordered by Approved_DateTime__c DESC, and using a Set to ensure only the most recently approved Quote updates each Opportunity. This approach handles up to 200 Quotes in a single transaction without hitting governor limits.
