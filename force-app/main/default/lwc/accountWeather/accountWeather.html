@@ -1,0 +1,100 @@
+<template>
+    <lightning-card title="Current Weather" icon-name="custom:custom85">
+        
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_medium">
+                <lightning-spinner alternative-text="Loading weather..." size="medium"></lightning-spinner>
+                <p class="slds-m-top_small">Fetching weather data...</p>
+            </div>
+        </template>
+
+        <template if:true={errorMessage}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_warning" role="alert">
+                    <span class="slds-assistive-text">Warning</span>
+                    <h2>
+                        <lightning-icon icon-name="utility:warning" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        {errorMessage}
+                    </h2>
+                </div>
+                <template if:true={showRefreshButton}>
+                    <div class="slds-text-align_center slds-m-top_medium">
+                        <lightning-button 
+                            variant="neutral" 
+                            label="Try Again" 
+                            onclick={handleRefresh}
+                            icon-name="utility:refresh">
+                        </lightning-button>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <template if:true={hasWeatherData}>
+            <div class="slds-p-around_medium">
+                
+                <div class="slds-grid slds-grid_align-center slds-m-bottom_medium">
+                    <div class="slds-col slds-text-align_center">
+                        <img src={weather.iconUrl} alt={weather.condition} class="weather-icon"/>
+                        <h2 class="slds-text-heading_large slds-m-top_x-small">
+                            {weather.city}, {weather.country}
+                        </h2>
+                        <p class="slds-text-heading_medium slds-text-color_weak">
+                            {weather.condition}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-grid_align-center slds-m-bottom_medium">
+                    <div class="slds-col slds-text-align_center">
+                        <div class="temperature-display">
+                            <span class="temp-value">{weather.temperatureC}°C</span>
+                            <span class="temp-separator"> / </span>
+                            <span class="temp-value">{weather.temperatureF}°F</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-grid_pull-padded slds-m-bottom_medium">
+                    
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_small">
+                        <div class="weather-detail-box">
+                            <lightning-icon icon-name="utility:water" size="small" class="slds-m-right_x-small"></lightning-icon>
+                            <div>
+                                <div class="slds-text-body_small slds-text-color_weak">Humidity</div>
+                                <div class="slds-text-heading_small">{weather.humidity}%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_small">
+                        <div class="weather-detail-box">
+                            <lightning-icon icon-name="utility:threedots" size="small" class="slds-m-right_x-small"></lightning-icon>
+                            <div>
+                                <div class="slds-text-body_small slds-text-color_weak">Wind Speed</div>
+                                <div class="slds-text-heading_small">{weather.windKph} km/h / {weather.windMph} mph</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="slds-text-align_center slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                    Last updated: {weather.lastUpdated}
+                </div>
+
+                <div class="slds-text-align_center">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Refresh Weather" 
+                        onclick={handleRefresh}
+                        icon-name="utility:refresh"
+                        disabled={isLoading}>
+                    </lightning-button>
+                </div>
+
+            </div>
+        </template>
+
+    </lightning-card>
+</template>
